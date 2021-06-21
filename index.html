@@ -3,9 +3,12 @@
 <head>
 	<title>PrimaVista</title>
 <style>
+	*{
+		font-family:'Courier New', Courier, monospace; 
+	}
 	body{
 		font-family:'Courier New', Courier, monospace; 
-		background-color:#e0e0e0;
+		background-color:#ffffff;
 	}
 	.key { position: absolute;  font-weight: 100; font-size: 15px;
 		border: 1px solid rgba(32,32,32,0.2);
@@ -39,43 +42,61 @@
 	#current-range{
 		font-family:'Courier New', Courier, monospace; 
 	}
+	#filled{ color: black; font-size: 30px;}
+	#not-filled{ color: #f1f1f1; font-size: 30px;}
 </style>
 
 <script src="audiosynth.js"></script>
 <script src="audiosynth.view.js"></script>
-
+<script>
+	const instruments = ["Piano", "Organ", "Acoustic Guitar", "EDM"];
+</script>
 </head>
 
 <body>
 	<br><br>
 <div ID="keyboard" class="keyboard-holder"></div>
 <div class="keyboard-options">
-<input class="octave-toggle left" type="button" ID="-_OCTAVE" value="<" onclick="setOctaveRange(-1)"/><span id="current-range"></span>
-<input class="octave-toggle right" type="button" ID="+_OCTAVE" value=">" onclick="setOctaveRange(1)"/><br /><br/>
+<input class="octave-toggle left" type="button" ID="-_OCTAVE" value="<"/>C<span id="OCTAVE_LOWER">3</span>-B<span id="OCTAVE_UPPER">5</span><input class="octave-toggle right" type="button" ID="+_OCTAVE" value=">"/><br /><br/>
 <select ID="sound">
-	<option value="0" selected>Piano</option>
-	<option value="1">Organ</option>
-    <option value="2">Acoustic Guitar</option>
-    <option value="3">EDM</option>
-</select><br>
+	<script>
+		for(let i=0; i<instruments.length; i++){
+			let selected = "";
+			if(i==sessionStorage.getItem("instrument")){
+				selected = "selected";
+			}
+			document.getElementById("sound").innerHTML += "<option value='"+i+"' "+selected+" >"+instruments[i]+"</option>"
+		}
+	</script>
+</select><br><br>
+<button onclick="changeVol(-1)"><</button>
+<span id="filled"></span><span id="not-filled"></span>
+<button onclick="changeVol(+1)">></button><br>
+<button onclick="window.location.reload(); sessionStorage.setItem('instrument', document.getElementById('sound').value)">Set Prefs</button>
 </div>
 
 <script type="text/javascript">
-
+let inputVolume;
+if(sessionStorage.getItem("volume")==null){
+	inputVolume = 1.0; 
+}else{
+	inputVolume = sessionStorage.getItem("volume");
+}
+changeVol(0);
+function changeVol(arg = 0){
+	let blackBars = parseInt(inputVolume*10);
+	let grayBars = 10-blackBars;
+	blackBars += arg; grayBars -= arg;
+	if(blackBars>=0&&grayBars>=0){
+	document.getElementById("filled").innerText = "|".repeat(blackBars);
+	document.getElementById("not-filled").innerText = "|".repeat(grayBars);
+	inputVolume = blackBars/10;
+	sessionStorage.setItem("volume", inputVolume);
+	console.log(sessionStorage.getItem("volume"));
+	}
+}
 var board = new AudioSynthView();
 board.draw();
-</script>
-<script>
-	let counter = 3; //values cound be 2, 3, 4
-	function setOctaveRange(arg = 0){
-		counter += arg;
-		if(counter==2||counter==3||counter==4){
-		document.getElementById("current-range").innerText = "C"+counter+"-B"+(counter+2);
-		}else{
-			counter -= arg; 
-		}
-	}
-	setOctaveRange(0);
 </script>
 </body>
 </html>
