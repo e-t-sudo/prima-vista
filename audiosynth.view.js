@@ -2,9 +2,8 @@ function AudioSynthView() {
 
 	var isMobile = !!navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i);
 	if(isMobile) { var evtListener = ['touchstart', 'touchend']; } else { var evtListener = ['mousedown', 'mouseup']; }
-
 	var __audioSynth = new AudioSynth();
-	__audioSynth.setVolume(0.5);
+	__audioSynth.setVolume(sessionStorage.getItem("volume"));
 	var __octave = 4;
 	
 	// Change octave
