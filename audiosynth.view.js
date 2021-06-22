@@ -3,9 +3,11 @@ function AudioSynthView() {
 	var isMobile = !!navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i);
 	if(isMobile) { var evtListener = ['touchstart', 'touchend']; } else { var evtListener = ['mousedown', 'mouseup']; }
 	var __audioSynth = new AudioSynth();
-	__audioSynth.setVolume(sessionStorage.getItem("volume"));
 	var __octave = 4;
-	
+	//change volume
+	let fnChangeVolume = function(x){
+		__audioSynth.setVolume(__audioSynth.getVolume()-(x/10));
+	}
 	// Change octave
 	var fnChangeOctave = function(x) {
 
@@ -367,16 +369,35 @@ function AudioSynthView() {
 		}
 	
 	};
-
+	//set up the initial volume config
+	let setupVolumeBar = function(){
+		let defaultVolume = parseInt(__audioSynth.getVolume()*10);
+		document.getElementById('filled').innerText = '|'.repeat(defaultVolume);
+		document.getElementById('not-filled').innerText = '|'.repeat(10-defaultVolume);
+	}
+	let updateVolumeBar = function(currentVolume){
+		let volume = currentVolume*10;
+		document.getElementById('filled').innerText = '|'.repeat(volume);
+		document.getElementById('not-filled').innerText = '|'.repeat(10-volume);
+	}
 	// Set up global event listeners
 
 	window.addEventListener('keydown', fnPlayKeyboard);
 	window.addEventListener('keyup', fnRemoveKeyBinding);
 	document.getElementById('-_OCTAVE').addEventListener('click', function() { fnChangeOctave(-1); });
 	document.getElementById('+_OCTAVE').addEventListener('click', function() { fnChangeOctave(1); });
-	
+	document.getElementById('volume-down').addEventListener('click', function(){
+		__audioSynth.setVolume(__audioSynth.getVolume()-0.1);
+		updateVolumeBar(__audioSynth.getVolume()); 
+	});
+	document.getElementById('volume-up').addEventListener('click', function(){
+		__audioSynth.setVolume(__audioSynth.getVolume()+0.1);
+		updateVolumeBar(__audioSynth.getVolume()); 
+	});
 	Object.defineProperty(this, 'draw', {
 		value: fnCreateKeyboard
 	});
-
+	Object.defineProperty(this, 'setupVolumeBar', {
+		value: setupVolumeBar
+	});
 }
