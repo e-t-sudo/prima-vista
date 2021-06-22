@@ -75,7 +75,9 @@
 </div>
 <script type="text/javascript">
 var board = new AudioSynthView();
-board.setupVolumeBar();
+document.addEventListener("DOMContentLoaded", function() { 
+	board.setupVolumeBar();
+});
 board.draw();
 </script>
 </body>
