@@ -273,7 +273,14 @@ function AudioSynthView() {
 			case 39:
 				fnChangeOctave(1);
 				break;
-		
+			// top
+			case 38:
+				document.getElementById('volume-up').click();
+				break;
+			//down 
+			case 40:
+				document.getElementById('volume-down').click();
+				break;
 			// space
 			case 16:
 				break;
