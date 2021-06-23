@@ -6,6 +6,9 @@
 	*{
 		font-family:'Courier New', Courier, monospace; 
 	}
+	button, select, input, option{
+		cursor: pointer; 
+	}
 	body{
 		font-family:'Courier New', Courier, monospace; 
 		background-color:#ffffff;
@@ -57,7 +60,7 @@
 	<br><br>
 <div ID="keyboard" class="keyboard-holder"></div>
 <div class="keyboard-options">
-<input class="octave-toggle left" type="button" ID="-_OCTAVE" value="<"/>C<span id="OCTAVE_LOWER">3</span>-B<span id="OCTAVE_UPPER">5</span><input class="octave-toggle right" type="button" ID="+_OCTAVE" value=">"/><br /><br/>
+<button class="octave-toggle left" ID="-_OCTAVE"><</button>C<span id="OCTAVE_LOWER">3</span>-B<span id="OCTAVE_UPPER">5</span><button class="octave-toggle right" ID="+_OCTAVE">></button><br /><br/>
 <select ID="sound">
 	<script>
 		for(let i=0; i<instruments.length; i++){
@@ -75,9 +78,7 @@
 </div>
 <script type="text/javascript">
 var board = new AudioSynthView();
-document.addEventListener("DOMContentLoaded", function() { 
-	board.setupVolumeBar();
-});
+board.setupVolumeBar();
 board.draw();
 </script>
 </body>
